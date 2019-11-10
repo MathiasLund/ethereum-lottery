@@ -14,9 +14,22 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    if (window.ethereum) {
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+        // Acccounts now exposed
+        web3.eth.sendTransaction({/* ... */});
+      } catch (error) {
+        // User denied account access...
+      }
+    }
+
     const manager = await lottery.methods.manager().call();
     const players = await lottery.methods.getPlayers().call();
     const balance = await web3.eth.getBalance(lottery.options.address);
+
+    console.log(players);
 
     this.setState({ manager, players, balance });
   }
@@ -52,13 +65,13 @@ class App extends Component {
     return (
       <div>
         <h2>Lottery Contract</h2>
-        <p>{this.state.manager}</p>
+        <p>Manager: {this.state.manager}</p>
         <p>{this.state.players.length} players are competing to win {web3.utils.fromWei(this.state.balance, 'ether')} ether!</p>
 
         <hr />
 
         <form onSubmit={this.onSubmit}>
-          <h4>Lucky?</h4>
+          <h4>Enter the # of Ether to enter</h4>
           <div>
             <label></label>
             <input
@@ -71,7 +84,7 @@ class App extends Component {
 
         <hr />
 
-        <h4>Pick a winner?</h4>
+        <h4>Pick a winner (as a manager)</h4>
         <button onClick={this.onClick}>Pick a winner</button>
 
         <hr />
