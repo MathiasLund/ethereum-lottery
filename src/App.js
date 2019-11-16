@@ -71,7 +71,7 @@ class App extends Component {
         <hr />
 
         <form onSubmit={this.onSubmit}>
-          <h4>Enter the # of Ether to enter</h4>
+          <h4>Put in 0.01 Ether to enter Lottery</h4>
           <div>
             <label></label>
             <input
